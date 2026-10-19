@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Desafios | Pensa Antes</title>
+  <meta name="description" content="Escolha um desafio, pense com a sua cabeça e só depois consulte a IA.">
+  <meta name="theme-color" content="#F8E9D4">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="pagina-desafios">
+  <a class="pular-link" href="#principal">Pular para o conteúdo</a>
+
+  <!-- Decoração: arcos retrô no canto superior direito (versão menor) -->
+  <svg class="arcos arcos--pequeno" viewBox="0 0 400 400" aria-hidden="true" focusable="false">
+    <circle class="arcos__contorno" cx="400" cy="0" r="336" stroke-width="61"/>
+    <circle class="arcos__faixa arcos__faixa--coral" cx="400" cy="0" r="336" stroke-width="56"/>
+    <circle class="arcos__contorno" cx="400" cy="0" r="256" stroke-width="61"/>
+    <circle class="arcos__faixa arcos__faixa--roxo" cx="400" cy="0" r="256" stroke-width="56"/>
+    <circle class="arcos__contorno" cx="400" cy="0" r="176" stroke-width="61"/>
+    <circle class="arcos__faixa arcos__faixa--verde" cx="400" cy="0" r="176" stroke-width="56"/>
+    <circle class="arcos__centro" cx="400" cy="0" r="104"/>
+  </svg>
+
+  <header class="topo topo--com-usuario conteudo">
+    <a class="marca" href="index.html" aria-label="Pensa Antes, página inicial">
+      <svg class="marca__icone" viewBox="0 0 70 70" width="44" height="44" aria-hidden="true" focusable="false">
+        <g class="marca__contorno">
+          <circle cx="20" cy="36" r="11"/>
+          <circle cx="32" cy="26" r="13"/>
+          <circle cx="47" cy="29" r="12"/>
+          <circle cx="52" cy="37" r="10"/>
+          <rect x="20" y="34" width="32" height="13"/>
+          <circle cx="14" cy="55" r="5"/>
+          <circle cx="7" cy="63" r="3"/>
+        </g>
+        <g class="marca__nuvem">
+          <circle cx="20" cy="36" r="11"/>
+          <circle cx="32" cy="26" r="13"/>
+          <circle cx="47" cy="29" r="12"/>
+          <circle cx="52" cy="37" r="10"/>
+          <rect x="20" y="34" width="32" height="13"/>
+        </g>
+        <circle class="marca__ponto marca__ponto--coral" cx="14" cy="55" r="5"/>
+        <circle class="marca__ponto marca__ponto--verde" cx="7" cy="63" r="3"/>
+      </svg>
+      <span class="marca__nome">Pensa Antes</span>
+    </a>
+
+    <!-- A saudação será preenchida depois; sem isso, fica só "Olá!" -->
+    <div class="usuario">
+      <p class="usuario__saudacao" id="saudacao">Olá!</p>
+      <a class="usuario__trocar" id="link-trocar-usuario" href="index.html">Não é você?</a>
+    </div>
+  </header>
+
+  <main id="principal">
+    <section class="vitrine" aria-labelledby="titulo-principal">
+      <div class="conteudo">
+        <div class="hero__texto">
+          <h1 id="titulo-principal" class="hero__titulo vitrine__titulo">Escolha um desafio</h1>
+          <p class="hero__slogan">Pense primeiro, com o seu próprio raciocínio. A IA entra depois, como segunda opinião.</p>
+          <div class="trilha" aria-hidden="true">
+            <span class="trilha__ponto"></span>
+            <span class="trilha__ponto"></span>
+            <span class="trilha__ponto"></span>
+          </div>
+        </div>
+
+        <!-- Área que a lista vai preencher. Só um dos quatro blocos fica visível por vez. -->
+        <div class="vitrine__area" id="area-desafios" aria-live="polite" aria-busy="true">
+
+          <!-- Carregando (visível por padrão) -->
+          <div class="estado estado--carregando" id="estado-carregando">
+            <span class="trilha" aria-hidden="true">
+              <span class="trilha__ponto"></span>
+              <span class="trilha__ponto"></span>
+              <span class="trilha__ponto"></span>
+            </span>
+            <p class="estado__titulo">Buscando desafios…</p>
+          </div>
+
+          <!-- Lista vazia -->
+          <div class="estado estado--vazio" id="estado-vazio" hidden>
+            <span class="estado__icone" aria-hidden="true">?</span>
+            <h2 class="estado__titulo">Ainda não há desafios por aqui</h2>
+            <p>Volte em breve, novos desafios estão a caminho.</p>
+            <a class="botao botao--secundario" href="index.html">Voltar ao início</a>
+          </div>
+
+          <!-- Erro -->
+          <div class="estado estado--erro" id="estado-erro" hidden>
+            <span class="estado__icone" aria-hidden="true">!</span>
+            <h2 class="estado__titulo">Não foi possível carregar os desafios</h2>
+            <p id="mensagem-erro"></p>
+            <button class="botao" type="button" id="botao-tentar-novamente">Tentar de novo</button>
+          </div>
+
+          <!-- Lista (os cartões entram aqui) -->
+          <ul class="lista-desafios" id="lista-desafios" role="list" hidden></ul>
+        </div>
+
+        <noscript>
+          <p class="estado estado--erro">Esta página precisa de JavaScript para mostrar os desafios.</p>
+        </noscript>
+      </div>
+    </section>
+  </main>
+
+  <footer class="rodape">
+    <div class="conteudo">
+      <p>Pensa Antes é um projeto para exercitar a análise crítica antes de consultar uma IA.</p>
+    </div>
+  </footer>
+
+  <!-- Modelo de um cartão, sem conteúdo. Fica inerte até o JavaScript clonar. -->
+  <template id="modelo-cartao-desafio">
+    <li class="cartao-desafio">
+      <p class="cartao-desafio__categoria"></p>
+      <h2 class="cartao-desafio__titulo"></h2>
+      <p class="cartao-desafio__descricao"></p>
+      <div class="cartao-desafio__rodape">
+        <p class="nivel">
+          <span class="nivel__rotulo">Dificuldade:</span>
+          <span class="nivel__texto"></span>
+          <span class="nivel__pontos" aria-hidden="true"><i></i><i></i><i></i></span>
+        </p>
+        <a class="botao cartao-desafio__link" href="desafio.html">Começar desafio<span class="so-leitor">: <span class="cartao-desafio__link-titulo"></span></span></a>
+      </div>
+    </li>
+  </template>
+  <script type="module" src="js/paginas/desafios.js"></script>
+</body>
+</html>

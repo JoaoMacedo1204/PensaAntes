@@ -1,0 +1,1772 @@
+/* ==========================================================================
+   Pensa Antes: folha de estilo
+
+   Sumário
+   1. Fontes
+   2. Tokens (variáveis)
+   3. Base
+   4. Utilitários
+   5. Componentes: botão, campo
+   6. Página Home
+   7. Movimento
+   ========================================================================== */
+
+
+/* 1. Fontes
+   Arquivos hospedados em /fonts (sem dependência de internet).
+   Caprasimo tem um único peso: títulos nunca recebem negrito. */
+
+@font-face {
+  font-family: "Caprasimo";
+  src: url("../fonts/caprasimo-regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Atkinson Hyperlegible";
+  src: url("../fonts/atkinson-hyperlegible-regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Atkinson Hyperlegible";
+  src: url("../fonts/atkinson-hyperlegible-bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+/* 2. Tokens
+   Use sempre os papéis (--cor-voce, --cor-ia...) nos componentes.
+   Os nomes das cores (--coral, --roxo...) ficam só aqui. */
+
+:root {
+  /* Paleta base */
+  --creme: #F8E9D4;
+  --roxo: #7955B2;
+  --coral: #FF8C69;
+  --verde: #C4DF78;
+  --grafite: #272438;
+
+  /* Paleta de apoio */
+  --papel: #FFF7EA;
+  --roxo-escuro: #5B3A91;
+  --coral-escuro: #B8402A;
+  --lilas: #E6DAF4;
+  --pessego: #FFDCCB;
+
+  /* Papéis das cores */
+  --cor-fundo: var(--creme);
+  --cor-superficie: var(--papel);
+  --cor-texto: var(--grafite);
+  --cor-contorno: var(--grafite);
+  --cor-voce: var(--coral);        /* o raciocínio e as ações do usuário */
+  --cor-ia: var(--roxo);           /* a IA, sempre como segunda perspectiva */
+  --cor-progresso: var(--verde);   /* etapa concluída, sucesso */
+  --cor-link: var(--roxo-escuro);
+  --cor-foco: var(--roxo-escuro);
+  --cor-erro: var(--coral-escuro);
+
+  /* Tipografia */
+  --fonte-titulo: "Caprasimo", "Cooper Black", Georgia, serif;
+  --fonte-texto: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --texto-pequeno: 0.9375rem;
+  --texto-base: 1.125rem;
+  --texto-destaque: clamp(1.25rem, 1.1rem + 0.7vw, 1.5rem);
+  --titulo-pagina: clamp(2.75rem, 1.4rem + 5.2vw, 5.25rem);
+  --titulo-secao: clamp(1.875rem, 1.4rem + 2vw, 2.75rem);
+  --titulo-cartao: clamp(1.5rem, 1.3rem + 0.8vw, 1.875rem);
+  --entrelinha-texto: 1.65;
+  --entrelinha-titulo: 1.05;
+
+  /* Espaçamento */
+  --esp-1: 0.25rem;
+  --esp-2: 0.5rem;
+  --esp-3: 0.75rem;
+  --esp-4: 1rem;
+  --esp-5: 1.5rem;
+  --esp-6: 2rem;
+  --esp-7: 3rem;
+  --esp-8: 4rem;
+  --esp-9: 6rem;
+  --margem-lateral: 1.25rem;
+  --largura-maxima: 72rem;
+
+  /* Forma */
+  --contorno: 2.5px;
+  --raio-pilula: 999px;
+  --raio-campo: 18px;
+  --raio-cartao: 34px 26px 38px 28px;
+  --sombra-dura: 5px 5px 0 var(--cor-contorno);
+  --sombra-botao: 4px 4px 0 var(--cor-contorno);
+}
+
+
+/* 3. Base */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  font-synthesis: none;
+}
+
+body {
+  position: relative;
+  isolation: isolate;          /* decoração com z-index negativo fica atrás do conteúdo */
+  margin: 0;
+  background: var(--cor-fundo);
+  color: var(--cor-texto);
+  font-family: var(--fonte-texto);
+  font-size: var(--texto-base);
+  line-height: var(--entrelinha-texto);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+p,
+ol {
+  margin: 0;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--fonte-titulo);
+  font-weight: 400;
+  line-height: var(--entrelinha-titulo);
+  text-wrap: balance;
+}
+
+ol {
+  padding: 0;
+  list-style: none;
+}
+
+svg {
+  display: block;
+}
+
+a {
+  color: var(--cor-link);
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 0.1em;
+}
+
+:focus-visible {
+  outline: 3px solid var(--cor-foco);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: var(--verde);
+  color: var(--grafite);
+}
+
+
+/* 4. Utilitários */
+
+.conteudo {
+  width: min(100% - 2 * var(--margem-lateral), var(--largura-maxima));
+  margin-inline: auto;
+}
+
+.pular-link {
+  position: absolute;
+  top: -5rem;
+  left: var(--margem-lateral);
+  z-index: 10;
+  padding: var(--esp-3) var(--esp-4);
+  background: var(--grafite);
+  color: var(--creme);
+  border-radius: var(--raio-campo);
+}
+
+.pular-link:focus {
+  top: var(--esp-3);
+}
+
+.titulo-secao {
+  font-size: var(--titulo-secao);
+}
+ /* Garante que o atributo hidden esconda mesmo elementos com display definido */
+  [hidden] {
+    display: none !important;
+  }
+
+/* Texto só para leitores de tela */
+.so-leitor {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* 5. Componentes */
+
+/* Botão: principal (coral, ação do usuário). Variantes: secundario, ia. */
+.botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--esp-2);
+  min-height: 3.25rem;
+  padding: var(--esp-3) var(--esp-6);
+  background: var(--cor-voce);
+  color: var(--grafite);
+  border: var(--contorno) solid var(--cor-contorno);
+  border-radius: var(--raio-pilula);
+  box-shadow: var(--sombra-botao);
+  font: 700 var(--texto-base) / 1.2 var(--fonte-texto);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.botao:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0 var(--cor-contorno);
+}
+
+.botao:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0 0 0 var(--cor-contorno);
+}
+
+.botao[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.botao--secundario {
+  background: var(--cor-superficie);
+}
+
+.botao--ia {
+  background: var(--cor-ia);
+  color: var(--creme);
+}
+
+.botao--bloco {
+  width: 100%;
+}
+
+/* Campo de formulário */
+.campo {
+  display: grid;
+  gap: var(--esp-2);
+}
+
+.campo__rotulo {
+  font-weight: 700;
+}
+
+.campo__opcional {
+  font-weight: 400;
+}
+
+.campo__entrada {
+  width: 100%;
+  min-height: 3.25rem;
+  padding: var(--esp-3) var(--esp-4);
+  background: var(--creme);
+  color: inherit;
+  border: var(--contorno) solid var(--cor-contorno);
+  border-radius: var(--raio-campo);
+  font: inherit;
+}
+
+.campo__entrada:focus-visible {
+  outline-offset: 2px;
+  background: var(--papel);
+}
+
+.campo__entrada[aria-invalid="true"] {
+  border-color: var(--cor-erro);
+}
+
+.campo__erro {
+  color: var(--cor-erro);
+  font-size: var(--texto-pequeno);
+  font-weight: 700;
+}
+
+
+/* 6. Página Home */
+
+/* Arcos retrô: único elemento decorativo grande. Ficam atrás de tudo. */
+.arcos {
+  --arcos-tamanho: clamp(7rem, 20vw, 21rem);
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: -1;
+  width: var(--arcos-tamanho);
+  height: var(--arcos-tamanho);
+}
+
+.arcos__contorno,
+.arcos__faixa {
+  fill: none;
+}
+
+.arcos__contorno {
+  stroke: var(--cor-contorno);
+}
+
+.arcos__faixa--coral {
+  stroke: var(--cor-voce);
+}
+
+.arcos__faixa--roxo {
+  stroke: var(--cor-ia);
+}
+
+.arcos__faixa--verde {
+  stroke: var(--cor-progresso);
+}
+
+.arcos__centro {
+  fill: var(--papel);
+  stroke: var(--cor-contorno);
+  stroke-width: 5;
+}
+
+/* Topo e marca */
+.topo {
+  padding-block: var(--esp-4);
+}
+
+.marca {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-3);
+  color: var(--roxo-escuro);
+  text-decoration: none;
+}
+
+.marca__nome {
+  font-family: var(--fonte-titulo);
+  font-size: 1.625rem;
+  line-height: 1;
+}
+
+.marca__contorno * {
+  fill: var(--cor-contorno);
+  stroke: var(--cor-contorno);
+  stroke-width: 5;
+}
+
+.marca__nuvem * {
+  fill: var(--cor-ia);
+}
+
+.marca__ponto {
+  stroke: none;
+}
+
+.marca__ponto--coral {
+  fill: var(--cor-voce);
+}
+
+.marca__ponto--verde {
+  fill: var(--cor-progresso);
+}
+
+/* Hero */
+.hero {
+  padding-block: var(--esp-5) var(--esp-9);
+}
+
+.hero__grade {
+  display: grid;
+  gap: var(--esp-7);
+  align-items: center;
+}
+
+.hero__texto {
+  display: grid;
+  gap: var(--esp-5);
+  justify-items: start;
+}
+
+.hero__titulo {
+  max-width: 13ch;
+  font-size: var(--titulo-pagina);
+  text-shadow: 0.035em 0.035em 0 var(--cor-voce);
+}
+
+.hero__slogan {
+  max-width: 34ch;
+  font-size: var(--texto-destaque);
+  line-height: 1.5;
+}
+
+.hero__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-3);
+}
+
+/* Trilha do balão de pensamento: três bolinhas que crescem */
+.trilha {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--esp-2);
+}
+
+.trilha__ponto {
+  display: block;
+  border: var(--contorno) solid var(--cor-contorno);
+  border-radius: 50%;
+}
+
+.trilha__ponto:nth-child(1) {
+  width: 0.75rem;
+  height: 0.75rem;
+  background: var(--cor-progresso);
+}
+
+.trilha__ponto:nth-child(2) {
+  width: 1.25rem;
+  height: 1.25rem;
+  background: var(--cor-voce);
+}
+
+.trilha__ponto:nth-child(3) {
+  width: 1.875rem;
+  height: 1.875rem;
+  background: var(--cor-ia);
+}
+
+/* Cartão de identificação */
+.cartao-id {
+  position: relative;
+  display: grid;
+  gap: var(--esp-4);
+  width: 100%;
+  max-width: 32rem;
+  padding: var(--esp-5);
+  background: var(--cor-superficie);
+  border: var(--contorno) solid var(--cor-contorno);
+  border-radius: var(--raio-cartao);
+  box-shadow: var(--sombra-dura);
+}
+
+/* Folha lilás inclinada atrás do cartão; o texto do cartão continua reto */
+.cartao-id::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--lilas);
+  border: var(--contorno) solid var(--cor-contorno);
+  border-radius: var(--raio-cartao);
+  transform: rotate(-2.5deg);
+}
+
+.cartao-id__titulo {
+  font-size: var(--titulo-cartao);
+}
+
+.cartao-id__ajuda {
+  margin-top: calc(var(--esp-2) * -1);
+}
+
+/* Como funciona */
+.como {
+  position: relative;
+  padding-block: var(--esp-8);
+  background: var(--cor-superficie);
+}
+
+.onda {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: clamp(1.5rem, 4vw, 3rem);
+  transform: translateY(calc(-100% + 1px));
+}
+
+.onda__fundo {
+  fill: var(--cor-superficie);
+}
+
+.onda__linha {
+  fill: none;
+  stroke: var(--cor-contorno);
+  stroke-width: var(--contorno);
+}
+
+.legenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-2) var(--esp-5);
+  margin-top: var(--esp-4);
+}
+
+.legenda__item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-2);
+}
+
+.legenda__marca {
+  width: 1.125rem;
+  height: 1.125rem;
+  border: var(--contorno) solid var(--cor-contorno);
+  border-radius: 50%;
+}
+
+.legenda__marca--voce {
+  background: var(--cor-voce);
+}
+
+.legenda__marca--ia {
+  background: var(--cor-ia);
+}
+
+/* Etapas: lista vertical no celular, horizontal no desktop */
+.etapas {
+  --num: 3.25rem;
+  --espaco: var(--esp-6);
+  display: grid;
+  gap: var(--espaco);
+  margin-top: var(--esp-6);
+}
+
+.etapa {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--num) 1fr;
+  column-gap: var(--esp-4);
+  align-items: start;
+  align-content: start;        /* evita que as linhas se esticem quando a etapa vizinha é mais alta */
+}
+
+/* Linha tracejada ligando uma etapa à próxima */
+.etapa::before {
+  content: "";
+  position: absolute;
+  top: calc(var(--num) + var(--esp-1));
+  bottom: calc(var(--espaco) * -1 + var(--esp-1));
+  left: calc(var(--num) / 2);
+  border-left: var(--contorno) dashed var(--cor-contorno);
+  transform: translateX(-50%);
+}
+
+.etapa:last-child::before {
+  display: none;
+}
+
+.etapa__numero {
+  grid-row: span 2;
+  display: grid;
+  place-items: center;
+  width: var(--num);
+  height: var(--num);
+  border: var(--contorno) solid var(--cor-contorno);
+  border-radius: 50%;
+  font-family: var(--fonte-titulo);
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.etapa__numero--voce {
+  background: var(--cor-voce);
+  color: var(--grafite);
+}
+
+.etapa__numero--ia {
+  background: var(--cor-ia);
+  color: var(--creme);
+}
+
+.etapa__titulo {
+  align-self: end;
+  font-size: 1.375rem;
+}
+
+.etapa__texto {
+  margin-top: var(--esp-1);
+}
+
+.principio {
+  max-width: 20ch;
+  margin-top: var(--esp-8);
+  font-family: var(--fonte-titulo);
+  font-size: var(--titulo-secao);
+  line-height: var(--entrelinha-titulo);
+  text-wrap: balance;
+}
+
+/* Rodapé */
+.rodape {
+  padding-block: var(--esp-6);
+  background: var(--grafite);
+  color: var(--creme);
+  font-size: var(--texto-pequeno);
+}
+
+/* Telas médias */
+@media (min-width: 40rem) {
+  .cartao-id {
+    padding: var(--esp-6);
+  }
+}
+
+/* Telas largas: hero em duas colunas e etapas em linha */
+@media (min-width: 62rem) {
+  .hero {
+    padding-block: var(--esp-7) calc(var(--esp-9) + var(--esp-4));
+  }
+
+  .hero__grade {
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: var(--esp-8);
+  }
+
+  .etapas {
+    grid-template-columns: repeat(5, 1fr);
+    column-gap: var(--esp-5);
+  }
+
+  .etapa {
+    grid-template-columns: 1fr;
+    row-gap: var(--esp-3);
+  }
+
+  .etapa__numero {
+    grid-row: auto;
+  }
+
+  .etapa__titulo {
+    align-self: start;
+  }
+
+  .etapa__texto {
+    margin-top: 0;
+  }
+
+  .etapa::before {
+    top: calc(var(--num) / 2);
+    bottom: auto;
+    left: calc(var(--num) + var(--esp-2));
+    right: calc(-1 * var(--esp-5) - var(--esp-2));
+
+    border-left: 0;
+    border-top: var(--contorno) dashed var(--cor-contorno);
+
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+}
+
+/* 6b. Página Desafios
+   Reaproveita: .arcos, .topo, .marca, .hero__texto, .hero__titulo,
+   .hero__slogan, .trilha, .botao, .rodape e os tokens de :root. */
+
+/* Rodapé sempre no fim da tela, mesmo com pouco conteúdo */
+.pagina-desafios {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+.pagina-desafios main {
+  flex: 1;
+}
+
+/* Arcos menores: aqui a decoração fica longe do texto */
+.arcos--pequeno {
+  --arcos-tamanho: clamp(5rem, 12vw, 11rem);
+}
+
+/* Topo com marca à esquerda e usuário à direita */
+.topo--com-usuario {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-3) var(--esp-5);
+}
+
+/* Fundo de papel mantém a saudação legível sobre os arcos */
+.usuario {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--esp-1) var(--esp-3);
+  padding: var(--esp-2) var(--esp-4);
+  background: var(--cor-superficie);
+  border: var(--contorno) solid var(--cor-contorno);
+  border-radius: var(--raio-pilula);
+}
+
+.usuario__saudacao {
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.usuario__trocar {
+  font-size: var(--texto-pequeno);
+}
+
+/* Vitrine: título, orientação e lista */
+.vitrine {
+  padding-block: var(--esp-5) var(--esp-9);
+}
+
+.vitrine__titulo {
+  max-width: none;
+  font-size: clamp(2.5rem, 1.6rem + 3.8vw, 4rem);
+}
+
+.vitrine__area {
+  margin-top: var(--esp-7);
+}
+
+/* Lista de cartões: 1 coluna no celular, 2 a partir de telas médias */
+.lista-desafios {
+  display: grid;
+  gap: var(--esp-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Cartão de desafio (mesmos tokens do cartão da Home) */
+.cartao-desafio {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;   /* o rodapé sempre desce para o fim do cartão */
+  gap: var(--esp-3);
+  padding: var(--esp-5);
+  background: var(--cor-superficie);
+  border: var(--contorno) solid var(--cor-contorno);
+  border-radius: var(--raio-cartao);
+  box-shadow: var(--sombra-dura);
+  isolation: isolate;
+}
+
+/* Folha inclinada atrás do cartão; alterna a cor e o lado */
+.cartao-desafio::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--lilas);
+  border: var(--contorno) solid var(--cor-contorno);
+  border-radius: var(--raio-cartao);
+  transform: rotate(-2.2deg);
+}
+
+.cartao-desafio:nth-child(even)::before {
+  background: var(--pessego);
+  transform: rotate(2.2deg);
+}
+
+.cartao-desafio__categoria {
+  justify-self: start;
+  padding: var(--esp-1) var(--esp-3);
+  background: var(--lilas);
+  border: var(--contorno) solid var(--cor-contorno);
+  border-radius: var(--raio-pilula);
+  font-size: var(--texto-pequeno);
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.cartao-desafio__titulo {
+  font-size: var(--titulo-cartao);
+}
+
+/* Até 4 linhas; o texto completo continua no HTML para leitores de tela */
+.cartao-desafio__descricao {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  overflow: hidden;
+}
+
+.cartao-desafio__rodape {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-4);
+  margin-top: var(--esp-3);
+  padding-top: var(--esp-4);
+  border-top: var(--contorno) dashed var(--cor-contorno);
+}
+
+/* Dificuldade: texto + pontos (nunca só cor).
+   O JS escolhe a classe nivel--1, nivel--2 ou nivel--3. */
+.nivel {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--esp-1) var(--esp-2);
+  font-size: var(--texto-pequeno);
+}
+
+.nivel__texto {
+  font-weight: 700;
+}
+
+.nivel__pontos {
+  display: inline-flex;
+  gap: var(--esp-1);
+}
+
+.nivel__pontos i {
+  width: 0.875rem;
+  height: 0.875rem;
+  background: var(--cor-superficie);
+  border: var(--contorno) solid var(--cor-contorno);
+  border-radius: 50%;
+}
+
+.nivel--1 .nivel__pontos i:nth-child(-n + 1),
+.nivel--2 .nivel__pontos i:nth-child(-n + 2),
+.nivel--3 .nivel__pontos i:nth-child(-n + 3) {
+  background: var(--cor-progresso);
+}
+
+/* Estados: carregando, vazio e erro */
+.estado {
+  display: grid;
+  justify-items: center;
+  gap: var(--esp-4);
+  max-width: 36rem;
+  margin-inline: auto;
+  padding: var(--esp-6) var(--esp-5);
+  background: var(--cor-superficie);
+  border: var(--contorno) dashed var(--cor-contorno);
+  border-radius: var(--raio-cartao);
+  text-align: center;
+}
+
+.estado__titulo {
+  font-size: var(--titulo-cartao);
+  font-family: var(--fonte-titulo);
+  line-height: var(--entrelinha-titulo);
+}
+
+.estado__icone {
+  display: grid;
+  place-items: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  background: var(--lilas);
+  border: var(--contorno) solid var(--cor-contorno);
+  border-radius: 50%;
+  font-family: var(--fonte-titulo);
+  font-size: 1.75rem;
+  line-height: 1;
+}
+
+.estado--erro {
+  border-style: solid;
+  border-color: var(--cor-erro);
+}
+
+.estado--erro .estado__icone {
+  background: var(--pessego);
+  border-color: var(--cor-erro);
+  color: var(--cor-erro);
+}
+
+.estado--erro p:not(.estado__titulo) {
+  color: var(--cor-erro);
+  font-weight: 700;
+}
+
+@media (min-width: 48rem) {
+  .lista-desafios {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--esp-7) var(--esp-6);
+  }
+
+  .cartao-desafio {
+    padding: var(--esp-6);
+  }
+}
+
+/* 6c. Página Desafio (resolução)
+   Reaproveita: .topo--com-usuario, .usuario, .arcos--pequeno, .estado, .nivel,
+   .cartao-desafio__categoria, .cartao-id, .campo, .campo__entrada, .campo__erro,
+   .botao, .hero__titulo, .vitrine__titulo e os tokens de :root. */
+
+/* Link de volta, logo abaixo do topo */
+.voltar {
+  display: inline-block;
+  margin-top: var(--esp-2);
+  font-weight: 700;
+}
+
+.desafio__area {
+  margin-top: var(--esp-5);
+  padding-bottom: var(--esp-9);
+}
+
+/* Cabeça do desafio: etiquetas e título */
+.desafio__cabeca {
+  display: grid;
+  gap: var(--esp-4);
+  justify-items: start;
+}
+
+.desafio__etiquetas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--esp-3) var(--esp-5);
+}
+
+/* Colunas: leitura (situação, dados, objetivo) e resposta */
+.desafio__grade {
+  display: grid;
+  gap: var(--esp-7);
+  margin-top: var(--esp-6);
+}
+
+.desafio__leitura,
+.desafio__resolver {
+  display: grid;
+  align-content: start;
+  gap: var(--esp-6);
+  min-width: 0;
+}
+
+/* Blocos de leitura */
+.bloco {
+  display: grid;
+  gap: var(--esp-3);
+}
+
+.bloco__titulo {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-3);
+  font-size: var(--titulo-cartao);
+}
+
+/* Bolinha coral antes do título: o raciocínio é seu */
+.bloco__titulo::before {
+  content: "";
+  flex: none;
+  width: 0.875rem;
+  height: 0.875rem;
+  background: var(--cor-voce);
+  border: var(--contorno) solid var(--cor-contorno);
+  border-radius: 50%;
+}
+
+.bloco__texto {
+  max-width: 62ch;
+}
+
+/* Ficha de dados: preserva as quebras de linha do texto da API */
+.bloco__dados {
+  padding: var(--esp-4) var(--esp-5);
+  background: var(--cor-superficie);
+  border: var(--contorno) solid var(--cor-contorno);
+  border-radius: var(--raio-campo);
+  box-shadow: var(--sombra-botao);
+  white-space: pre-line;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+
+/* Pergunta principal em destaque */
+.pergunta {
+  display: grid;
+  gap: var(--esp-2);
+  padding: var(--esp-5);
+  background: var(--pessego);
+  border: var(--contorno) solid var(--cor-contorno);
+  border-radius: var(--raio-cartao);
+  box-shadow: var(--sombra-dura);
+}
+
+.pergunta__rotulo {
+  font-family: var(--fonte-texto);
+  font-size: var(--texto-pequeno);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.pergunta__texto {
+  font-family: var(--fonte-titulo);
+  font-size: var(--titulo-cartao);
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+/* Formulário: usa .cartao-id, só que sem o limite de largura da Home */
+.cartao-id--largo {
+  max-width: none;
+}
+
+/* Aviso: pensar antes (roxo = a IA que ainda não entrou) */
+.aviso {
+  display: flex;
+  gap: var(--esp-3);
+  align-items: flex-start;
+  padding: var(--esp-3) var(--esp-4);
+  background: var(--lilas);
+  border: var(--contorno) solid var(--cor-contorno);
+  border-radius: var(--raio-campo);
+  font-size: var(--texto-pequeno);
+}
+
+.aviso__ponto {
+  flex: none;
+  width: 0.875rem;
+  height: 0.875rem;
+  margin-top: 0.3em;
+  background: var(--cor-ia);
+  border: var(--contorno) solid var(--cor-contorno);
+  border-radius: 50%;
+}
+
+/* Campos de texto longo */
+.campo__ajuda {
+  font-size: var(--texto-pequeno);
+}
+
+.campo__entrada--longo {
+  min-height: 9rem;
+  resize: vertical;
+  line-height: var(--entrelinha-texto);
+}
+
+@media (min-width: 62rem) {
+  .desafio__grade {
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: var(--esp-8);
+    align-items: start;
+  }
+
+  .pergunta {
+    padding: var(--esp-6);
+  }
+}
+
+.desafio__titulo {
+  font-family: var(--fonte-titulo);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1.1;
+  max-width: 20ch;
+  text-wrap: balance;
+}
+
+/* 6d. Escolha depois do raciocínio inicial
+   Reaproveita: .estado__icone, .botao (--ia, --secundario, --bloco), .campo__erro e os tokens de :root. */
+
+.escolha {
+  display: grid;
+  gap: var(--esp-4);
+  padding: var(--esp-5);
+  background: var(--lilas);
+  border: var(--contorno) solid var(--cor-contorno);
+  border-radius: var(--raio-cartao);
+  box-shadow: var(--sombra-dura);
+}
+
+/* Selo verde: progresso (o raciocínio já está registrado) */
+.estado__icone--ok {
+  justify-self: start;
+  background: var(--cor-progresso);
+}
+
+.escolha__titulo {
+  font-size: var(--titulo-cartao);
+}
+
+.escolha__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-5);
+  margin-top: var(--esp-2);
+}
+
+.escolha__opcao {
+  display: grid;
+  flex: 1 1 15rem;
+  align-content: start;
+  gap: var(--esp-2);
+}
+
+.escolha__dica {
+  font-size: var(--texto-pequeno);
+  text-align: center;
+}
+
+@media (min-width: 40rem) {
+  .escolha {
+    padding: var(--esp-6);
+  }
+}
+
+.escolha[hidden] {
+  display: none;
+}
+
+/* 6e. Análise da IA
+Só usa os tokens de :root. Roxo = a IA; o cartão é papel para o texto longo ficar legível. */
+
+.analise-ia {
+  display: grid;
+  gap: var(--esp-4);
+  padding: var(--esp-5);
+  background: var(--cor-superficie);
+  border: var(--contorno) solid var(--cor-contorno);
+  border-radius: var(--raio-cartao);
+  box-shadow: var(--sombra-dura);
+}
+
+/* Garante que a seção fique oculta enquanto tiver o atributo hidden (o display: grid acima não pode vencer) */
+.analise-ia[hidden] {
+  display: none;
+}
+
+/* Selo roxo: de quem é a voz */
+.analise-ia__selo {
+  justify-self: start;
+  padding: var(--esp-1) var(--esp-3);
+  background: var(--cor-ia);
+  color: var(--papel);
+  border: var(--contorno) solid var(--cor-contorno);
+  border-radius: var(--raio-pilula);
+  font-size: var(--texto-pequeno);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.analise-ia__titulo {
+  font-size: var(--titulo-cartao);
+  text-wrap: balance;
+}
+
+/* Lembrete de que a análise é opcional */
+.analise-ia__aviso {
+  padding: var(--esp-3) var(--esp-4);
+  background: var(--lilas);
+  border: var(--contorno) solid var(--cor-contorno);
+  border-radius: var(--raio-campo);
+  font-size: var(--texto-pequeno);
+}
+
+/* Texto vindo da API: preserva parágrafos e linhas, e quebra palavras longas sem criar rolagem lateral */
+.analise-ia__texto {
+  max-width: 62ch;
+  padding-left: var(--esp-4);
+  border-left: calc(var(--contorno) * 2) solid var(--cor-ia);
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 40rem) {
+  .analise-ia {
+    padding: var(--esp-6);
+  }
+}
+
+.campo__erro--sucesso {
+  color: var(--cor-texto);
+}
+
+/* 6f. Decisão final
+   Reaproveita: .campo, .campo__rotulo, .campo__ajuda, .campo__entrada(--longo), .campo__erro, .botao(--bloco) e os tokens de :root.
+   Coral = você: a decisão é do usuário. */
+
+.decisao {
+  display: grid;
+  gap: var(--esp-4);
+  padding: var(--esp-5);
+  background: var(--cor-superficie);
+  border: var(--contorno) solid var(--cor-contorno);
+  border-radius: var(--raio-cartao);
+  box-shadow: var(--sombra-dura);
+}
+
+/* Garante que a seção fique oculta enquanto tiver o atributo hidden (o display: grid acima não pode vencer) */
+.decisao[hidden] {
+  display: none;
+}
+
+/* Selo coral: de quem é a voz */
+.decisao__selo {
+  justify-self: start;
+  padding: var(--esp-1) var(--esp-3);
+  background: var(--cor-voce);
+  border: var(--contorno) solid var(--cor-contorno);
+  border-radius: var(--raio-pilula);
+  font-size: var(--texto-pequeno);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.decisao__titulo {
+  font-size: var(--titulo-cartao);
+  text-wrap: balance;
+}
+
+/* Lembrete de que a decisão pertence a quem decide */
+.decisao__nota {
+  padding: var(--esp-3) var(--esp-4);
+  background: var(--pessego);
+  border: var(--contorno) solid var(--cor-contorno);
+  border-radius: var(--raio-campo);
+  font-size: var(--texto-pequeno);
+}
+
+.decisao__form {
+  display: grid;
+  gap: var(--esp-5);
+}
+
+/* Grupo de opções (fieldset) sem o visual padrão do navegador */
+.decisao__opcoes {
+  display: grid;
+  gap: var(--esp-3);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.decisao__legenda {
+  margin-bottom: var(--esp-3);
+  padding: 0;
+  font-weight: 700;
+}
+
+/* Opção de decisão: o cartão inteiro é clicável (o ::after do rótulo cobre o cartão) */
+.opcao {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: var(--esp-3);
+  row-gap: var(--esp-1);
+  align-items: start;
+  padding: var(--esp-4);
+  background: var(--cor-superficie);
+  border: var(--contorno) solid var(--cor-contorno);
+  border-radius: var(--raio-campo);
+}
+
+.opcao__entrada {
+  position: relative;
+  z-index: 1;
+  grid-row: 1 / span 3;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin: 0;
+  accent-color: var(--grafite);
+}
+
+.opcao__rotulo {
+  grid-column: 2;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.opcao__rotulo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.opcao__texto,
+.opcao__nota {
+  grid-column: 2;
+  font-size: var(--texto-pequeno);
+}
+
+.opcao__nota {
+  font-weight: 700;
+}
+
+/* Escolhida */
+.opcao:has(.opcao__entrada:checked) {
+  background: var(--pessego);
+  box-shadow: var(--sombra-botao);
+}
+
+/* Desabilitada (o desafio.js desliga a opção da IA quando não houve consulta) */
+.opcao:has(.opcao__entrada:disabled) {
+  opacity: 0.6;
+}
+
+.opcao:has(.opcao__entrada:disabled) .opcao__rotulo {
+  cursor: not-allowed;
+}
+
+/* Nenhuma opção escolhida (o desafio.js marca aria-invalid nos rádios) */
+.opcao:has(.opcao__entrada[aria-invalid="true"]) {
+  border-color: var(--cor-erro);
+}
+
+@media (min-width: 40rem) {
+  .decisao {
+    padding: var(--esp-6);
+  }
+}
+
+
+/* =========================================================
+   6g. Avaliação automática do raciocínio
+   ========================================================= */
+
+.avaliacao {
+  display: grid;
+  gap: var(--esp-5);
+  padding: var(--esp-5);
+  background: var(--cor-superficie);
+  border: var(--contorno) solid var(--cor-contorno);
+  border-radius: var(--raio-cartao);
+  box-shadow: var(--sombra-dura);
+}
+
+.avaliacao[hidden],
+.avaliacao__resultado[hidden] {
+  display: none;
+}
+
+.avaliacao__selo {
+  justify-self: start;
+  padding: var(--esp-1) var(--esp-3);
+  background: var(--cor-progresso);
+  border: var(--contorno) solid var(--cor-contorno);
+  border-radius: var(--raio-pilula);
+  font-size: var(--texto-pequeno);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.avaliacao__titulo {
+  font-size: var(--titulo-cartao);
+}
+
+.avaliacao__introducao {
+  max-width: 62ch;
+}
+
+.avaliacao__mensagem {
+  font-size: var(--texto-pequeno);
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.avaliacao__mensagem:empty {
+  display: none;
+}
+
+.avaliacao__resultado {
+  display: grid;
+  gap: var(--esp-6);
+}
+
+.avaliacao__subtitulo {
+  font-size: var(--titulo-cartao);
+}
+
+.avaliacao__pontuacao {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: var(--esp-2);
+  padding: var(--esp-6);
+  background: var(--lilas);
+  border: var(--contorno) solid var(--cor-contorno);
+  border-radius: var(--raio-cartao);
+  text-align: center;
+}
+
+.avaliacao__total {
+  font-family: var(--fonte-titulo);
+  font-size: clamp(3rem, 8vw, 5rem);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.avaliacao__maximo {
+  font-weight: 700;
+}
+
+.avaliacao__pontuacao-legenda {
+  flex-basis: 100%;
+  font-size: var(--texto-pequeno);
+}
+
+.avaliacao__criterios {
+  display: grid;
+  gap: var(--esp-5);
+}
+
+.avaliacao__criterio {
+  display: grid;
+  gap: var(--esp-2);
+}
+
+.avaliacao__criterio-cabecalho {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--esp-2);
+}
+
+.avaliacao__criterio-cabecalho h3 {
+  font-family: var(--fonte-texto);
+  font-size: var(--texto-base);
+  font-weight: 700;
+}
+
+.avaliacao__criterio-cabecalho span {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.avaliacao__barra {
+  height: 1rem;
+  background: var(--creme);
+  border: var(--contorno) solid var(--cor-contorno);
+  border-radius: var(--raio-pilula);
+  overflow: hidden;
+}
+
+.avaliacao__barra::before {
+  content: "";
+  display: block;
+  width: var(--progresso, 0%);
+  height: 100%;
+  background: var(--cor-progresso);
+  transition: width 0.25s ease;
+}
+
+.avaliacao__feedback {
+  display: grid;
+  gap: var(--esp-3);
+  padding: var(--esp-5);
+  background: var(--pessego);
+  border: var(--contorno) solid var(--cor-contorno);
+  border-radius: var(--raio-campo);
+}
+
+.avaliacao__feedback h3 {
+  font-family: var(--fonte-texto);
+  font-size: var(--texto-base);
+  font-weight: 700;
+}
+
+.avaliacao__feedback p {
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 40rem) {
+  .avaliacao {
+    padding: var(--esp-6);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .avaliacao__barra::before {
+    transition: none;
+  }
+}
+
+/* ========================================
+   6h. AUTOAVALIAÇÃO
+   ======================================== */
+
+.autoavaliacao {
+  margin-top: 2rem;
+  padding: 2rem;
+  background: #f8e9d4;
+  border: 3px solid #24243a;
+  border-radius: 18px;
+  box-shadow: 6px 6px 0 #24243a;
+}
+
+.autoavaliacao__selo {
+  display: inline-block;
+  margin-bottom: 1rem;
+  padding: 0.4rem 0.9rem;
+  background: #c7b5f3;
+  border: 2px solid #24243a;
+  border-radius: 999px;
+  font-weight: 700;
+}
+
+.autoavaliacao__titulo {
+  margin-bottom: 1rem;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  line-height: 1.2;
+}
+
+.autoavaliacao__introducao {
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.autoavaliacao .campo {
+  margin-bottom: 1.5rem;
+}
+
+.autoavaliacao .campo__entrada {
+  width: 100%;
+  resize: vertical;
+}
+
+.autoavaliacao .botao {
+  margin-top: 0.5rem;
+}
+
+/* Adaptação para telas menores */
+@media (max-width: 600px) {
+  .autoavaliacao {
+    padding: 1.25rem;
+    box-shadow: 4px 4px 0 #24243a;
+  }
+}
+
+/* ==========================================
+   6i. PÁGINA DE CONCLUSÃO
+   ========================================== */
+
+.conclusao {
+  display: grid;
+  place-items: center;
+  padding-block: var(--esp-7) var(--esp-9);
+}
+
+.conclusao__cartao {
+  display: grid;
+  justify-items: center;
+  gap: var(--esp-5);
+
+  width: 100%;
+  max-width: 48rem;
+  padding: var(--esp-6);
+
+  background: var(--cor-superficie);
+  border: var(--contorno) solid var(--cor-contorno);
+  border-radius: var(--raio-cartao);
+  box-shadow: var(--sombra-dura);
+
+  text-align: center;
+}
+
+.conclusao__selo {
+  padding: var(--esp-2) var(--esp-4);
+  background: var(--cor-progresso);
+  border: var(--contorno) solid var(--cor-contorno);
+  border-radius: var(--raio-pilula);
+
+  font-size: var(--texto-pequeno);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.conclusao__icone {
+  display: grid;
+  place-items: center;
+
+  width: 5rem;
+  height: 5rem;
+
+  background: var(--cor-progresso);
+  border: var(--contorno) solid var(--cor-contorno);
+  border-radius: 50%;
+  box-shadow: var(--sombra-botao);
+
+  font-family: var(--fonte-titulo);
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.conclusao__titulo {
+  max-width: 17ch;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1.15;
+}
+
+.conclusao__introducao {
+  max-width: 55ch;
+}
+
+.conclusao__resumo {
+  display: grid;
+  gap: var(--esp-4);
+
+  width: 100%;
+  padding: var(--esp-5);
+
+  background: var(--lilas);
+  border: var(--contorno) solid var(--cor-contorno);
+  border-radius: var(--raio-campo);
+
+  text-align: left;
+}
+
+.conclusao__subtitulo {
+  font-size: var(--titulo-cartao);
+}
+
+.conclusao__etapas {
+  display: grid;
+  gap: var(--esp-3);
+
+  padding-left: var(--esp-5);
+  list-style: decimal;
+}
+
+.conclusao__etapas li {
+  padding-left: var(--esp-2);
+}
+
+.conclusao__etapas li::marker {
+  font-weight: 700;
+}
+
+.conclusao__mensagem {
+  max-width: 36ch;
+  padding: var(--esp-4);
+
+  background: var(--pessego);
+  border: var(--contorno) solid var(--cor-contorno);
+  border-radius: var(--raio-campo);
+
+  font-family: var(--fonte-titulo);
+  font-size: var(--texto-destaque);
+  line-height: 1.4;
+}
+
+@media (min-width: 40rem) {
+  .conclusao__cartao {
+    padding: var(--esp-8);
+  }
+}
+
+@media (max-width: 39.99rem) {
+  .conclusao {
+    padding-block: var(--esp-5) var(--esp-7);
+  }
+
+  .conclusao__cartao {
+    padding: var(--esp-5);
+  }
+
+  .conclusao__resumo {
+    padding: var(--esp-4);
+  }
+}
+
+/* 7. Movimento
+   Só anima quem não pediu movimento reduzido. */
+
+@keyframes surgir {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  .botao {
+    transition: transform 0.12s ease-out, box-shadow 0.12s ease-out;
+  }
+
+  .trilha__ponto {
+    animation: surgir 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+
+  .trilha__ponto:nth-child(2) {
+    animation-delay: 0.18s;
+  }
+
+  .trilha__ponto:nth-child(3) {
+    animation-delay: 0.36s;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+  /* As bolinhas pulsam enquanto carrega */
+  .estado--carregando .trilha__ponto {
+    animation: pulsar 0.9s ease-in-out infinite alternate;
+  }
+
+  .estado--carregando .trilha__ponto:nth-child(2) {
+    animation-delay: 0.15s;
+  }
+
+  .estado--carregando .trilha__ponto:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+}
+
+@keyframes pulsar {
+    from {
+      transform: translateY(0);
+    }
+
+    to {
+      transform: translateY(-0.5rem);
+    }
+  }
+}
+
+/* Página de desafio: jornada vertical centralizada */
+.pagina-desafio .desafio__conteudo {
+  width: 100%;
+  max-width: 850px;
+  margin-inline: auto;
+}
+
+.pagina-desafio .desafio__grade {
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--esp-7);
+}
+
+.pagina-desafio .desafio__leitura,
+.pagina-desafio .desafio__resolver {
+  width: 100%;
+  min-width: 0;
+}

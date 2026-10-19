@@ -1,0 +1,30 @@
+
+# Arquivos gerados pelo .NET
+**/bin/
+**/obj/
+
+# Arquivos temporários do Visual Studio
+.vs/
+*.user
+*.suo
+
+# Configurações locais do VS Code
+.vscode/
+
+# Arquivos de ambiente com possíveis credenciais
+.env
+.env.*
+**/.env
+**/.env.*
+
+# Configurações locais sensíveis
+**/appsettings.Local.json
+**/appsettings.Production.json
+
+# Logs
+*.log
+logs/
+
+# Arquivos temporários do sistema
+.DS_Store
+Thumbs.db

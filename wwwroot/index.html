@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pensa Antes</title>
+  <meta name="description" content="Resolva um desafio com a sua cabeça, consulte a IA só depois e veja o quanto ela mudou sua decisão.">
+  <meta name="theme-color" content="#F8E9D4">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="pular-link" href="#principal">Pular para o conteúdo</a>
+
+  <!-- Decoração: arcos retrô no canto superior direito -->
+  <svg class="arcos" viewBox="0 0 400 400" aria-hidden="true" focusable="false">
+    <circle class="arcos__contorno" cx="400" cy="0" r="336" stroke-width="61"/>
+    <circle class="arcos__faixa arcos__faixa--coral" cx="400" cy="0" r="336" stroke-width="56"/>
+    <circle class="arcos__contorno" cx="400" cy="0" r="256" stroke-width="61"/>
+    <circle class="arcos__faixa arcos__faixa--roxo" cx="400" cy="0" r="256" stroke-width="56"/>
+    <circle class="arcos__contorno" cx="400" cy="0" r="176" stroke-width="61"/>
+    <circle class="arcos__faixa arcos__faixa--verde" cx="400" cy="0" r="176" stroke-width="56"/>
+    <circle class="arcos__centro" cx="400" cy="0" r="104"/>
+  </svg>
+
+  <header class="topo conteudo">
+    <a class="marca" href="index.html" aria-label="Pensa Antes, página inicial">
+      <svg class="marca__icone" viewBox="0 0 70 70" width="44" height="44" aria-hidden="true" focusable="false">
+        <g class="marca__contorno">
+          <circle cx="20" cy="36" r="11"/>
+          <circle cx="32" cy="26" r="13"/>
+          <circle cx="47" cy="29" r="12"/>
+          <circle cx="52" cy="37" r="10"/>
+          <rect x="20" y="34" width="32" height="13"/>
+          <circle cx="14" cy="55" r="5"/>
+          <circle cx="7" cy="63" r="3"/>
+        </g>
+        <g class="marca__nuvem">
+          <circle cx="20" cy="36" r="11"/>
+          <circle cx="32" cy="26" r="13"/>
+          <circle cx="47" cy="29" r="12"/>
+          <circle cx="52" cy="37" r="10"/>
+          <rect x="20" y="34" width="32" height="13"/>
+        </g>
+        <circle class="marca__ponto marca__ponto--coral" cx="14" cy="55" r="5"/>
+        <circle class="marca__ponto marca__ponto--verde" cx="7" cy="63" r="3"/>
+      </svg>
+      <span class="marca__nome">Pensa Antes</span>
+    </a>
+  </header>
+
+  <main id="principal">
+    <section class="hero" aria-labelledby="titulo-principal">
+      <div class="hero__grade conteudo">
+        <div class="hero__texto">
+          <h1 id="titulo-principal" class="hero__titulo">Pense primeiro. Consulte depois.</h1>
+          <p class="hero__slogan">Resolva um desafio com o seu raciocínio lógico, consulte a IA só depois e veja o quanto ela mudou sua decisão.</p>
+          <div class="hero__acoes">
+            <a class="botao botao--secundario" href="#como-funciona">Ver como funciona</a>
+          </div>
+          <div class="trilha" aria-hidden="true">
+            <span class="trilha__ponto"></span>
+            <span class="trilha__ponto"></span>
+            <span class="trilha__ponto"></span>
+          </div>
+        </div>
+
+        <form class="cartao-id" id="form-identificacao" aria-labelledby="titulo-cadastro">
+          <h2 id="titulo-cadastro" class="cartao-id__titulo">Vamos começar</h2>
+          <p class="cartao-id__ajuda">Só precisamos saber quem está pensando.</p>
+
+          <div class="campo">
+            <label class="campo__rotulo" for="nome">Nome completo</label>
+            <input class="campo__entrada" id="nome" name="nome" type="text" autocomplete="name" maxlength="100" required>
+          </div>
+
+          <div class="campo">
+            <label class="campo__rotulo" for="email">E-mail</label>
+            <input class="campo__entrada" id="email" name="email" type="email" autocomplete="email" maxlength="254" required>
+          </div>
+
+          <div class="campo">
+            <label class="campo__rotulo" for="area">Área de interesse <span class="campo__opcional">(opcional)</span></label>
+            <input class="campo__entrada" id="area" name="areaPreferencia" type="text" maxlength="100">
+          </div>
+
+          <!-- Espaço reservado para mensagens da API (próxima etapa) -->
+          <p class="campo__erro" id="mensagem-form" role="alert"></p>
+
+          <button class="botao botao--bloco" type="submit">Começar</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="como" id="como-funciona" aria-labelledby="titulo-como">
+      <!-- Decoração: onda separando o topo do resto da página -->
+      <svg class="onda" viewBox="0 0 1440 48" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+        <path class="onda__fundo" d="M0 24 C120 0 240 0 360 24 S600 48 720 24 S960 0 1080 24 S1320 48 1440 24 V48 H0 Z"/>
+        <path class="onda__linha" vector-effect="non-scaling-stroke" d="M0 24 C120 0 240 0 360 24 S600 48 720 24 S960 0 1080 24 S1320 48 1440 24"/>
+      </svg>
+
+      <div class="conteudo">
+        <h2 id="titulo-como" class="titulo-secao">Como funciona</h2>
+
+        <p class="legenda">
+          <span class="legenda__item"><span class="legenda__marca legenda__marca--voce" aria-hidden="true"></span>Coral é o seu raciocínio.</span>
+          <span class="legenda__item"><span class="legenda__marca legenda__marca--ia" aria-hidden="true"></span>Roxo é a IA.</span>
+        </p>
+
+        <ol class="etapas" role="list">
+          <li class="etapa">
+            <span class="etapa__numero etapa__numero--voce" aria-hidden="true">1</span>
+            <h3 class="etapa__titulo">Leia e analise</h3>
+            <p class="etapa__texto">Entenda o desafio e registre sua análise e sua justificativa.</p>
+          </li>
+          <li class="etapa">
+            <span class="etapa__numero etapa__numero--ia" aria-hidden="true">2</span>
+            <h3 class="etapa__titulo">Consulte a IA, se quiser</h3>
+            <p class="etapa__texto">Só depois de salvar sua resposta você pode pedir uma segunda perspectiva.</p>
+          </li>
+          <li class="etapa">
+            <span class="etapa__numero etapa__numero--voce" aria-hidden="true">3</span>
+            <h3 class="etapa__titulo">Decida e explique</h3>
+            <p class="etapa__texto">Mantenha sua resposta ou mude com base na IA, e diga por quê.</p>
+          </li>
+          <li class="etapa">
+            <span class="etapa__numero etapa__numero--ia" aria-hidden="true">4</span>
+            <h3 class="etapa__titulo">Veja sua avaliação</h3>
+            <p class="etapa__texto"> Descubra os pontos fortes do seu raciocínio e receba sugestões para continuar evoluindo.</p>
+          </li>
+          <li class="etapa">
+            <span class="etapa__numero etapa__numero--voce" aria-hidden="true">5</span>
+            <h3 class="etapa__titulo">Faça sua autoavaliação</h3>
+            <p class="etapa__texto">Conte o que foi bem e o que pode melhorar.</p>
+          </li>
+        </ol>
+
+        <p class="principio">A IA é uma segunda opinião, não a primeira.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="rodape">
+    <div class="conteudo">
+      <p>Pensa Antes é um projeto para exercitar a análise crítica antes de consultar uma IA.</p>
+    </div>
+  </footer>
+  <script type="module" src="/js/paginas/home.js"></script>
+</body>
+</html>

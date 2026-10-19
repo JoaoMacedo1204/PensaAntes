@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Desafio | Pensa Antes</title>
+  <meta name="description" content="Leia o desafio, registre a sua análise e a sua justificativa. A IA só entra depois.">
+  <meta name="theme-color" content="#F8E9D4">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<script type="module" src="js/paginas/desafio.js"></script>
+<body class="pagina-desafios pagina-desafio">
+  <a class="pular-link" href="#principal">Pular para o conteúdo</a>
+
+  <!-- Decoração: arcos retrô no canto superior direito (versão menor) -->
+  <svg class="arcos arcos--pequeno" viewBox="0 0 400 400" aria-hidden="true" focusable="false">
+    <circle class="arcos__contorno" cx="400" cy="0" r="336" stroke-width="61"/>
+    <circle class="arcos__faixa arcos__faixa--coral" cx="400" cy="0" r="336" stroke-width="56"/>
+    <circle class="arcos__contorno" cx="400" cy="0" r="256" stroke-width="61"/>
+    <circle class="arcos__faixa arcos__faixa--roxo" cx="400" cy="0" r="256" stroke-width="56"/>
+    <circle class="arcos__contorno" cx="400" cy="0" r="176" stroke-width="61"/>
+    <circle class="arcos__faixa arcos__faixa--verde" cx="400" cy="0" r="176" stroke-width="56"/>
+    <circle class="arcos__centro" cx="400" cy="0" r="104"/>
+  </svg>
+
+  <header class="topo topo--com-usuario conteudo">
+    <a class="marca" href="index.html" aria-label="Pensa Antes, página inicial">
+      <svg class="marca__icone" viewBox="0 0 70 70" width="44" height="44" aria-hidden="true" focusable="false">
+        <g class="marca__contorno">
+          <circle cx="20" cy="36" r="11"/>
+          <circle cx="32" cy="26" r="13"/>
+          <circle cx="47" cy="29" r="12"/>
+          <circle cx="52" cy="37" r="10"/>
+          <rect x="20" y="34" width="32" height="13"/>
+          <circle cx="14" cy="55" r="5"/>
+          <circle cx="7" cy="63" r="3"/>
+        </g>
+        <g class="marca__nuvem">
+          <circle cx="20" cy="36" r="11"/>
+          <circle cx="32" cy="26" r="13"/>
+          <circle cx="47" cy="29" r="12"/>
+          <circle cx="52" cy="37" r="10"/>
+          <rect x="20" y="34" width="32" height="13"/>
+        </g>
+        <circle class="marca__ponto marca__ponto--coral" cx="14" cy="55" r="5"/>
+        <circle class="marca__ponto marca__ponto--verde" cx="7" cy="63" r="3"/>
+      </svg>
+      <span class="marca__nome">Pensa Antes</span>
+    </a>
+
+    <!-- A saudação será preenchida depois; sem isso, fica só "Olá!" -->
+    <div class="usuario">
+      <p class="usuario__saudacao" id="saudacao">Olá!</p>
+    </div>
+  </header>
+
+  <main id="principal">
+    <div class="conteudo desafio">
+      <a class="voltar" id="link-voltar" href="desafios.html"><span aria-hidden="true">←</span> Voltar aos desafios</a>
+
+      <!-- Área que o JavaScript vai preencher. Só um dos quatro blocos fica visível por vez. -->
+      <div class="desafio__area" id="area-desafio" aria-live="polite" aria-busy="true">
+
+        <!-- Carregando (visível por padrão) -->
+        <div class="estado estado--carregando" id="estado-carregando">
+          <span class="trilha" aria-hidden="true">
+            <span class="trilha__ponto"></span>
+            <span class="trilha__ponto"></span>
+            <span class="trilha__ponto"></span>
+          </span>
+          <p class="estado__titulo">Buscando o desafio…</p>
+        </div>
+
+        <!-- Desafio não encontrado (id ausente, inválido ou inexistente) -->
+        <div class="estado estado--vazio" id="estado-nao-encontrado" hidden>
+          <span class="estado__icone" aria-hidden="true">?</span>
+          <h1 class="estado__titulo">Desafio não encontrado</h1>
+          <p>Não encontramos esse desafio. Você pode voltar à lista e escolher outro para resolver.</p>
+          <a class="botao botao--secundario" href="desafios.html">Ver todos os desafios</a>
+        </div>
+
+        <!-- Erro -->
+        <div class="estado estado--erro" id="estado-erro" hidden>
+          <span class="estado__icone" aria-hidden="true">!</span>
+          <h1 class="estado__titulo">Não foi possível carregar o desafio</h1>
+          <p id="mensagem-erro"></p>
+          <button class="botao" type="button" id="botao-tentar-novamente">Tentar de novo</button>
+        </div>
+
+        <!-- Desafio carregado -->
+        <article class="desafio__conteudo" id="conteudo-desafio" aria-labelledby="desafio-titulo" hidden>
+
+          <header class="desafio__cabeca">
+            <div class="desafio__etiquetas">
+              <p class="cartao-desafio__categoria" id="desafio-categoria"></p>
+              <p class="nivel" id="desafio-nivel">
+                <span class="nivel__rotulo">Dificuldade:</span>
+                <span class="nivel__texto" id="desafio-nivel-texto"></span>
+                <span class="nivel__pontos" aria-hidden="true"><i></i><i></i><i></i></span>
+              </p>
+            </div>
+            <h1 class="desafio__titulo" id="desafio-titulo"></h1>
+          </header>
+
+          <div class="desafio__grade">
+
+            <!-- Coluna 1: o que a pessoa precisa ler -->
+            <div class="desafio__leitura">
+              <section class="bloco" aria-labelledby="titulo-situacao">
+                <h2 class="bloco__titulo" id="titulo-situacao">A situação</h2>
+                <p class="bloco__texto" id="desafio-situacao"></p>
+              </section>
+
+              <section class="bloco" aria-labelledby="titulo-dados">
+                <h2 class="bloco__titulo" id="titulo-dados">Dados disponíveis</h2>
+                <!-- As quebras de linha do texto são preservadas pelo CSS (white-space: pre-line) -->
+                <p class="bloco__dados" id="desafio-dados"></p>
+              </section>
+
+              <section class="bloco" aria-labelledby="titulo-objetivo">
+                <h2 class="bloco__titulo" id="titulo-objetivo">Seu objetivo</h2>
+                <p class="bloco__texto" id="desafio-objetivo"></p>
+              </section>
+            </div>
+
+            <!-- Coluna 2: a vez da pessoa pensar -->
+            <div class="desafio__resolver">
+              <section class="pergunta" aria-labelledby="titulo-pergunta">
+                <h2 class="pergunta__rotulo" id="titulo-pergunta">Pergunta principal</h2>
+                <p class="pergunta__texto" id="desafio-pergunta"></p>
+              </section>
+
+              <form class="cartao-id cartao-id--largo" id="form-resposta" aria-labelledby="titulo-form">
+                <h2 class="cartao-id__titulo" id="titulo-form">Sua vez de pensar</h2>
+
+                <p class="aviso">
+                  <span class="aviso__ponto" aria-hidden="true"></span>
+                  <span>Pense com o seu próprio raciocínio primeiro. A IA só entra depois que você salvar a sua resposta, como segunda opinião.</span>
+                </p>
+
+                <div class="campo">
+                  <label class="campo__rotulo" for="analise-inicial">Sua análise inicial</label>
+                  <p class="campo__ajuda" id="ajuda-analise">O que você entende do problema e qual decisão tomaria?</p>
+                  <textarea class="campo__entrada campo__entrada--longo" id="analise-inicial" name="analiseInicial" rows="5" maxlength="5000" aria-describedby="ajuda-analise" required></textarea>
+                </div>
+
+                <div class="campo">
+                  <label class="campo__rotulo" for="justificativa-inicial">Sua justificativa inicial</label>
+                  <p class="campo__ajuda" id="ajuda-justificativa">Por que você chegou a essa conclusão?</p>
+                  <textarea class="campo__entrada campo__entrada--longo" id="justificativa-inicial" name="justificativaInicial" rows="5" maxlength="5000" aria-describedby="ajuda-justificativa" required></textarea>
+                </div>
+
+                <p class="campo__erro" id="mensagem-form" role="alert"></p>
+
+                <button class="botao botao--bloco" type="submit">Salvar meu raciocínio</button>
+              </form>
+                            <!-- Escolha depois do raciocínio inicial. O desafio.js vai remover o hidden. -->
+              <section class="escolha" id="secao-escolha-ia" aria-labelledby="titulo-escolha" hidden>
+                <span class="estado__icone estado__icone--ok" aria-hidden="true">✓</span>
+                <h2 class="escolha__titulo" id="titulo-escolha" tabindex="-1">Seu primeiro raciocínio está registrado!</h2>
+                <p>Agora você escolhe o próximo passo. Consultar a IA é opcional: ela entra como uma segunda opinião, e a decisão continua sendo sua.</p>
+
+                <div class="escolha__acoes">
+                  <div class="escolha__opcao">
+                    <button class="botao botao--ia botao--bloco" type="button" id="botao-consultar-ia" aria-describedby="dica-consultar-ia">Consultar a análise da IA</button>
+                    <p class="escolha__dica" id="dica-consultar-ia">Veja uma segunda perspectiva sobre o desafio.</p>
+                  </div>
+
+                  <div class="escolha__opcao">
+                    <button class="botao botao--secundario botao--bloco" type="button" id="botao-continuar-sem-ia" aria-describedby="dica-continuar-sem-ia">Continuar sem consultar a IA</button>
+                    <p class="escolha__dica" id="dica-continuar-sem-ia">Siga em frente só com o seu raciocínio.</p>
+                  </div>
+                </div>
+
+                <!-- Espaço reservado para mensagens de erro das próximas etapas -->
+                <p class="campo__erro" id="mensagem-escolha" role="alert"></p>
+              </section>
+              
+              <!-- Análise da IA. O desafio.js vai preencher #conteudo-analise-ia (só com textContent) e remover o hidden. -->
+              <section class="analise-ia" id="secao-analise-ia" aria-labelledby="titulo-analise-ia" hidden>
+                <p class="analise-ia__selo">Perspectiva da IA</p>
+                <h2 class="analise-ia__titulo" id="titulo-analise-ia" tabindex="-1">Uma segunda perspectiva para você</h2>
+                <p class="analise-ia__aviso">Esta é uma perspectiva adicional, não uma resposta obrigatória. Compare com o seu raciocínio, questione o que fizer sentido e decida por conta própria.</p>
+                <div class="analise-ia__texto" id="conteudo-analise-ia"></div>
+              </section>
+              
+              <!-- Decisão final. O desafio.js vai remover o hidden. -->
+              <section class="decisao" id="secao-decisao-final" aria-labelledby="titulo-decisao" hidden>
+                <p class="decisao__selo">Sua decisão</p>
+                <h2 class="decisao__titulo" id="titulo-decisao" tabindex="-1">Agora, a decisão é sua</h2>
+                <p class="decisao__nota">A decisão final é sempre sua, mesmo depois de ouvir a IA. Ela é uma segunda perspectiva: você pode manter o seu raciocínio ou mudá-lo, desde que explique o porquê.</p>
+
+                <form class="decisao__form" id="form-decisao" aria-labelledby="titulo-decisao">
+                  <fieldset class="decisao__opcoes" id="opcoes-decisao">
+                    <legend class="decisao__legenda">O que você decide?</legend>
+
+                    <div class="opcao">
+                      <input class="opcao__entrada" type="radio" id="decisao-manter" name="decisaoFinal" value="ManterRespostaInicial" aria-describedby="descricao-decisao-manter" required>
+                      <label class="opcao__rotulo" id="rotulo-decisao-manter" for="decisao-manter">Manter minha resposta inicial</label>
+                      <p class="opcao__texto" id="descricao-decisao-manter">Continuo com o meu raciocínio, com ou sem a análise da IA.</p>
+                    </div>
+
+                    <div class="opcao">
+                      <input class="opcao__entrada" type="radio" id="decisao-modificar" name="decisaoFinal" value="ModificarComBaseNaIA" aria-describedby="descricao-decisao-modificar nota-decisao-modificar" required>
+                      <label class="opcao__rotulo" id="rotulo-decisao-modificar" for="decisao-modificar">Modificar com base na IA</label>
+                      <p class="opcao__texto" id="descricao-decisao-modificar">Mudo a minha resposta por causa de algo que a análise da IA me fez perceber.</p>
+                      <!-- O desafio.js mostra esta nota (remove o hidden) quando desabilitar esta opção, por não haver consulta à IA. -->
+                      <p class="opcao__nota" id="nota-decisao-modificar" hidden>Disponível depois de consultar a IA.</p>
+                    </div>
+                  </fieldset>
+
+                  <div class="campo">
+                    <label class="campo__rotulo" for="justificativa-final">Sua justificativa final</label>
+                    <p class="campo__ajuda" id="ajuda-justificativa-final">Por que você decidiu assim? O que pesou na sua escolha?</p>
+                    <textarea class="campo__entrada campo__entrada--longo" id="justificativa-final" name="justificativaFinal" rows="5" maxlength="5000" aria-describedby="ajuda-justificativa-final" required></textarea>
+                  </div>
+
+                  <p class="campo__erro" id="mensagem-decisao" role="alert"></p>
+
+                  <button class="botao botao--bloco" type="submit" id="botao-finalizar-resposta">Finalizar minha resposta</button>
+                </form>
+              </section>
+              
+              <!-- Avaliação automática: será conectada à API na próxima etapa. -->
+              <section
+                class="avaliacao"
+                id="secao-avaliacao"
+                aria-labelledby="titulo-avaliacao"
+                hidden
+              >
+                <p class="avaliacao__selo">Seu resultado</p>
+
+                <h2 class="avaliacao__titulo" id="titulo-avaliacao" tabindex="-1">
+                  Como foi seu raciocínio?
+                </h2>
+
+                <p class="avaliacao__introducao">
+                  Sua resposta será analisada em cinco critérios.
+                  A avaliação ajuda você a refletir sobre seu raciocínio,
+                  não apenas sobre a decisão que tomou.
+                </p>
+
+                <button
+                  class="botao botao--bloco"
+                  type="button"
+                  id="botao-avaliar-resposta"
+                >
+                  Ver avaliação do meu raciocínio
+                </button>
+
+                <button
+                  class="botao botao--secundario botao--bloco"
+                  type="button"
+                  id="botao-pular-avaliacao"
+                >
+                  Continuar sem avaliação da IA
+                </button>
+
+                <p
+                  class="avaliacao__mensagem"
+                  id="mensagem-avaliacao"
+                  role="status"
+                  aria-live="polite"
+                ></p>
+
+                <div
+                  class="avaliacao__resultado"
+                  id="resultado-avaliacao"
+                  aria-labelledby="titulo-resultado-avaliacao"
+                  hidden
+                >
+                <h3 class="avaliacao__subtitulo" id="titulo-resultado-avaliacao">
+                  Sua avaliação
+                </h3>
+
+                <div class="avaliacao__pontuacao">
+                  <span class="avaliacao__total" id="avaliacao-total">—</span>
+                  <span class="avaliacao__maximo">/ 15 pontos</span>
+                  <p class="avaliacao__pontuacao-legenda">Pontuação geral</p>
+                </div>
+
+                <div class="avaliacao__criterios">
+                  <div class="avaliacao__criterio">
+                    <div class="avaliacao__criterio-cabecalho">
+                      <h3>Identificação do problema</h3>
+                        <span id="nota-identificacao">— / 3</span>
+                    </div>
+                  <div class="avaliacao__barra" id="barra-identificacao"
+                    role="progressbar" aria-label="Identificação do problema"
+                    aria-valuemin="0" aria-valuemax="3"
+                    aria-valuenow="0"></div>
+                </div>
+
+                <div class="avaliacao__criterio">
+                  <div class="avaliacao__criterio-cabecalho">
+                    <h3>Uso dos dados</h3>
+                    <span id="nota-uso-dos-dados">— / 3</span>
+                  </div>
+                <div class="avaliacao__barra" id="barra-uso-dos-dados"
+                  role="progressbar" aria-label="Uso dos dados"
+                  aria-valuemin="0" aria-valuemax="3"
+                  aria-valuenow="0"></div>
+                </div>
+
+                <div class="avaliacao__criterio">
+                  <div class="avaliacao__criterio-cabecalho">
+                    <h3>Formulação de hipóteses</h3>
+                    <span id="nota-hipotese">— / 3</span>
+                  </div>
+                <div class="avaliacao__barra" id="barra-hipotese"
+                  role="progressbar" aria-label="Formulação de hipóteses"
+                  aria-valuemin="0" aria-valuemax="3"
+                  aria-valuenow="0"></div>
+                </div>
+
+                <div class="avaliacao__criterio">
+                  <div class="avaliacao__criterio-cabecalho">
+                    <h3>Justificativa</h3>
+                    <span id="nota-justificativa">— / 3</span>
+                  </div>
+                <div class="avaliacao__barra" id="barra-justificativa"
+                  role="progressbar" aria-label="Justificativa"
+                  aria-valuemin="0" aria-valuemax="3"
+                  aria-valuenow="0"></div>
+                </div>
+
+                <div class="avaliacao__criterio">
+                  <div class="avaliacao__criterio-cabecalho">
+                    <h3>Pensamento crítico</h3>
+                    <span id="nota-pensamento-critico">— / 3</span>
+                  </div>
+                <div class="avaliacao__barra" id="barra-pensamento-critico"
+                  role="progressbar" aria-label="Pensamento crítico"
+                  aria-valuemin="0" aria-valuemax="3"
+                  aria-valuenow="0"></div>
+                </div>
+              </div>
+
+              <div class="avaliacao__feedback">
+                <h3>Feedback da IA</h3>
+                <p id="avaliacao-feedback"></p>
+              </div>
+
+              <button
+                class="botao botao--bloco"
+                type="button"
+                id="botao-continuar-apos-avaliacao"
+              >
+                Continuar para minha reflexão
+              </button>
+
+            </div>
+          </section>
+          <!-- Autoavaliação: reflexão obrigatória após a decisão final. -->
+            <section
+              class="autoavaliacao"
+              id="secao-autoavaliacao"
+              aria-labelledby="titulo-autoavaliacao"
+              hidden
+            >
+              <p class="autoavaliacao__selo">Sua reflexão</p>
+
+              <h2
+                class="autoavaliacao__titulo"
+                id="titulo-autoavaliacao"
+                tabindex="-1"
+              >
+                Agora é hora de olhar para o seu raciocínio!
+              </h2>
+
+              <p class="autoavaliacao__introducao">
+                Independentemente de ter consultado a IA, o mais importante
+                é refletir sobre suas próprias decisões.
+              </p>
+
+              <form id="form-autoavaliacao">
+
+                <div class="campo">
+                  <label class="campo__rotulo" for="autoavaliacao-pontos-fortes">
+                    O que você fez bem durante sua análise?
+                  </label>
+
+                  <p class="campo__ajuda" id="ajuda-pontos-fortes">
+                    Pense nas decisões, nos dados e nos argumentos que você
+                    utilizou durante o desafio.
+                  </p>
+
+                  <textarea
+                    class="campo__entrada campo__entrada--longo"
+                    id="autoavaliacao-pontos-fortes"
+                    name="oQueFezBem"
+                    rows="4"
+                    maxlength="2000"
+                    aria-describedby="ajuda-pontos-fortes"
+                    required
+                  ></textarea>
+                </div>
+
+                <div class="campo">
+                  <label class="campo__rotulo" for="autoavaliacao-melhorias">
+                    O que você poderia melhorar no seu raciocínio?
+                  </label>
+
+                  <p class="campo__ajuda" id="ajuda-melhorias">
+                    Considere outras perspectivas, informações que faltaram
+                    ou hipóteses que poderiam ter sido exploradas.
+                  </p>
+
+                  <textarea
+                    class="campo__entrada campo__entrada--longo"
+                    id="autoavaliacao-melhorias"
+                    name="oQuePodeMelhorar"
+                    rows="4"
+                    maxlength="2000"
+                    aria-describedby="ajuda-melhorias"
+                    required
+                  ></textarea>
+                </div>
+
+                <p
+                  class="campo__erro"
+                  id="mensagem-autoavaliacao"
+                  role="alert"
+                ></p>
+
+                <button
+                  class="botao botao--bloco"
+                  type="submit"
+                  id="botao-salvar-autoavaliacao"
+                >
+                  Concluir minha reflexão
+                </button>
+
+              </form>
+                <a
+                  class="botao botao--secundario botao--bloco"
+                  id="botao-ver-conclusao"
+                  href="#"
+                  hidden
+                >
+                  Ver conclusão do desafio →
+                </a>
+            </section>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <noscript>
+        <p class="estado estado--erro">Esta página precisa de JavaScript para mostrar o desafio.</p>
+      </noscript>
+    </div>
+  </main>
+
+  <footer class="rodape">
+    <div class="conteudo">
+      <p>Pensa Antes é um projeto para exercitar a análise crítica antes de consultar uma IA.</p>
+    </div>
+  </footer>
+</body>
+</html>
