@@ -50,8 +50,6 @@ Também foi preparada uma apresentação visual com as principais telas da aplic
 
 **[Ver apresentação completa em PDF](docs/pensa-antes-pdf.pdf)**
 
----
-
 ## Tecnologias utilizadas
 
 ### Backend
