@@ -1,0 +1,27 @@
+# Arquivos gerados pelo .NET
+**/bin/
+**/obj/
+
+# Controle de versão
+.git/
+.gitignore
+
+# Arquivos do Visual Studio e VS Code
+.vs/
+.vscode/
+
+# Configurações e segredos locais
+.env
+.env.*
+**/appsettings.Development.json
+**/appsettings.Local.json
+**/secrets.json
+
+# Arquivos temporários
+*.log
+*.tmp
+*.bak
+
+# Arquivos do sistema operacional
+.DS_Store
+Thumbs.db
