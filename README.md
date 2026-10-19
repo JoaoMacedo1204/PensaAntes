@@ -1,5 +1,7 @@
 # Pensa Antes
 
+![Banner do Pensa Antes](docs/images/banner-pensa-antes.png)
+
 **Pense primeiro. Consulte a IA depois.**
 
 O **Pensa Antes** é uma plataforma educacional desenvolvida para estimular o pensamento crítico, a autonomia e a tomada de decisão diante do uso crescente da Inteligência Artificial.
