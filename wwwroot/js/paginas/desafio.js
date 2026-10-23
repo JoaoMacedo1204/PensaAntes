@@ -607,7 +607,6 @@ function iniciar(usuario) {
       consultando = false;
       atualizarBotoesDoFluxo(); // libera o botão (se as regras permitirem) antes de devolver o foco
       botaoConsultarIa.textContent = textoBotaoConsultar;
-      botaoConsultarIa.textContent = textoBotaoConsultar;
       mostrarMensagemEscolha(mensagemParaErroDeConsulta(erro));
 
       if (usuarioIniciou) botaoConsultarIa.focus(); // o foco se perde quando o botão é desabilitado
