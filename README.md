@@ -26,8 +26,8 @@ O objetivo não é evitar a Inteligência Artificial, mas promover seu uso de ma
 - **Análise inicial independente:** registro do raciocínio e da justificativa do usuário antes de qualquer consulta à IA.
 - **Consulta opcional à IA:** integração com o Google Gemini para apresentar uma análise alternativa do desafio.
 - **Tomada de decisão:** possibilidade de manter a resposta inicial ou modificá-la com base na análise da IA, quando consultada.
-- **Avaliação do pensamento crítico:** avaliação apoiada por IA em cinco critérios — identificação do problema, uso dos dados, formulação de hipóteses, justificativa e pensamento crítico — com pontuação de 0 a 3 por critério, totalizando até 15 pontos.
-- **Autoavaliação:** reflexão sobre os pontos positivos e os aspectos que podem ser melhorados.
+- **Avaliação opcional por IA:** feedback em cinco critérios — identificação do problema, uso dos dados, formulação de hipóteses, justificativa e pensamento crítico — com pontuação de 0 a 3 por critério, totalizando até 15 pontos.
+- **Autoavaliação:** reflexão sobre os pontos positivos e os aspectos que podem ser melhorados, mesmo quando o usuário decide não solicitar a avaliação da IA.
 - **Persistência de dados:** armazenamento de usuários, respostas, decisões e avaliações no PostgreSQL.
 
 ## Como funciona
@@ -39,12 +39,13 @@ O fluxo acontece nas seguintes etapas:
 1. **Escolha do desafio:** seleção de uma situação-problema conforme a categoria e o nível de dificuldade.
 2. **Análise inicial:** interpretação dos dados disponíveis, elaboração de uma resposta e registro da justificativa.
 3. **Consulta opcional à IA:** possibilidade de comparar a análise inicial com uma perspectiva gerada pelo Google Gemini.
-4. **Decisão final:** escolha entre manter a resposta inicial ou utilizar a análise da IA, acompanhada de uma justificativa.
-5. **Avaliação e autoavaliação:** apresentação de feedback e pontuação, seguida de uma reflexão sobre o próprio desempenho.
+4. **Decisão final:** escolha entre manter a resposta inicial ou modificá-la com base na análise da IA, quando consultada, acompanhada de uma justificativa.
+5. **Avaliação opcional:** possibilidade de receber uma pontuação e um feedback gerados pela IA.
+6. **Autoavaliação:** reflexão sobre o próprio desempenho, independentemente da utilização da avaliação automática.
 
 ## Demonstração
 
-O Pensa Antes está disponível publicamente e pode ser experimentado pelo navegador.
+O Pensa Antes está disponível publicamente e pode ser experimentado diretamente pelo navegador.
 
 **[Experimentar o Pensa Antes](https://pensaantes.onrender.com/)**
 
@@ -72,7 +73,7 @@ Também foi preparada uma apresentação visual com as principais telas da aplic
 
 ### Inteligência Artificial
 
-- **Google Gemini API:** geração de análises e avaliação das respostas dos usuários.
+- **Google Gemini API:** geração de análises alternativas e avaliação das respostas dos usuários.
 
 ### Infraestrutura e ferramentas
 
@@ -117,14 +118,14 @@ PensaAntes.API/
 └── appsettings.json
 ```
 
-*Estrutura resumida dos principais diretórios e arquivos do projeto. Os nomes devem corresponder aos arquivos existentes no repositório.*
+*Estrutura resumida dos principais diretórios e arquivos do projeto. Os nomes e caminhos devem ser conferidos com o repositório.*
 
 ### Responsabilidades dos componentes
 
 - **Controllers:** recebem as requisições HTTP e disponibilizam os endpoints.
 - **DTOs:** definem os dados transferidos entre o frontend e a API.
 - **Models:** representam as entidades do domínio.
-- **Services:** realizam as integrações com a API do Google Gemini.
+- **Services:** concentram a lógica de integração com o Google Gemini e os serviços de avaliação.
 - **Data:** contém o contexto do Entity Framework Core, as configurações das entidades e a inicialização dos dados.
 - **Migrations:** gerenciam as alterações na estrutura do banco de dados.
 - **Enums:** definem os valores utilizados nas regras da aplicação.
@@ -144,13 +145,25 @@ PensaAntes.API/
 
 ## Aprendizados e desafios
 
-O desenvolvimento do Pensa Antes foi uma oportunidade de transformar uma ideia em uma aplicação real, passando pelo planejamento, desenvolvimento, integração de serviços e publicação na internet.
+O desenvolvimento do Pensa Antes me permitiu colocar em prática conhecimentos de Engenharia de Software, desde a organização inicial do projeto até sua publicação na internet.
 
-Durante o projeto, aprofundei meus conhecimentos em C#, ASP.NET Core, bancos de dados relacionais e integração com APIs externas. Também tive contato prático com Docker, Render e Neon durante a implantação da aplicação.
+Durante o desenvolvimento, trabalhei com **C#, ASP.NET Core, Entity Framework Core e PostgreSQL**, criando uma API REST para gerenciar usuários, desafios, respostas e avaliações.
 
-Entre os principais desafios estiveram a organização da estrutura do projeto, a integração com o Google Gemini e a configuração do ambiente de produção.
+Também desenvolvi o frontend utilizando **HTML, CSS e JavaScript**, integrando as telas aos endpoints da API.
 
-Além do aprendizado técnico, desenvolvi minha capacidade de pesquisar soluções, resolver problemas e aprender com os feedbacks das pessoas que testaram a plataforma.
+Um dos principais desafios foi a **integração com o Google Gemini**. Durante os testes em produção, enfrentei problemas de disponibilidade do serviço e precisei investigar os erros, ajustar o modelo utilizado e melhorar o tratamento de falhas da aplicação.
+
+Outros aprendizados importantes foram:
+
+- **Organização do código:** separação das responsabilidades entre Controllers, Services, Models e DTOs.
+- **Banco de dados:** criação de entidades, relacionamentos e migrations utilizando Entity Framework Core.
+- **Integração com APIs externas:** envio de requisições, processamento de respostas e tratamento de erros.
+- **Publicação na nuvem:** utilização de Docker, Render e Neon para disponibilizar a aplicação.
+- **Experiência do usuário:** implementação de validações, mensagens de erro e mecanismos para evitar envios duplicados.
+
+Além das habilidades técnicas, o projeto fortaleceu minha capacidade de pesquisar soluções, investigar problemas e transformar uma ideia em uma aplicação funcional.
+
+O Pensa Antes também reforçou um aprendizado importante: **a Inteligência Artificial pode ajudar muito no desenvolvimento, mas entender o problema e avaliar as soluções continua sendo essencial.**
 
 ## Melhorias futuras
 
