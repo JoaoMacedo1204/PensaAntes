@@ -15,15 +15,18 @@ public class RespostasController : ControllerBase
     private readonly AppDbContext _context;
     private readonly IGeminiService _geminiService;
     private readonly IAvaliacaoService _avaliacaoService;
+    private readonly ILogger<RespostasController> _logger;
 
     public RespostasController(
         AppDbContext context,
         IGeminiService geminiService,
-        IAvaliacaoService avaliacaoService)
+        IAvaliacaoService avaliacaoService,
+        ILogger<RespostasController> logger)
     {
         _context = context;
         _geminiService = geminiService;
         _avaliacaoService = avaliacaoService;
+        _logger = logger;
     }
 
     // POST /api/respostas
@@ -152,16 +155,20 @@ public class RespostasController : ControllerBase
             analise = await _geminiService.GerarAnaliseAsync(
                 resposta.Desafio, resposta, cancellationToken);
         }
-        catch (Exception) when (!cancellationToken.IsCancellationRequested)
+        catch (Exception ex) when (!cancellationToken.IsCancellationRequested)
         {
-            // Mensagem genérica de propósito: nada do erro interno vai para o cliente.
+            _logger.LogError(
+                ex,
+                "Erro ao consultar o Gemini para a resposta {RespostaId}",
+                id);
+
             return StatusCode(StatusCodes.Status502BadGateway, new ProblemDetails
             {
                 Status = StatusCodes.Status502BadGateway,
                 Title = "Falha ao consultar a IA",
-                Detail = "Não foi possível obter a análise da IA no momento. Tente novamente mais tarde."
+                Detail = "A IA está temporariamente indisponível. Aguarde alguns instantes e tente novamente. Sua análise inicial foi preservada."
             });
-        }
+}
 
         resposta.AnaliseIA = analise;
         resposta.ConsultouIA = true;
@@ -298,14 +305,18 @@ public class RespostasController : ControllerBase
                 resultado = await _avaliacaoService.AvaliarAsync(
                     resposta.Desafio, resposta, cancellationToken);
             }
-            catch (Exception) when (!cancellationToken.IsCancellationRequested)
+            catch (Exception ex) when (!cancellationToken.IsCancellationRequested)
             {
-                // Mensagem genérica de propósito: nada do erro interno vai para o cliente.
+                _logger.LogError(
+                    ex,
+                    "Erro ao gerar avaliação da IA para a resposta {RespostaId}",
+                    id);
+
                 return StatusCode(StatusCodes.Status502BadGateway, new ProblemDetails
                 {
                     Status = StatusCodes.Status502BadGateway,
                     Title = "Falha ao avaliar a resposta",
-                    Detail = "Não foi possível obter a avaliação da IA no momento. Tente novamente mais tarde."
+                    Detail = "Não foi possível gerar sua avaliação agora. Tente novamente em alguns instantes. Sua resposta final foi preservada."
                 });
             }
 
